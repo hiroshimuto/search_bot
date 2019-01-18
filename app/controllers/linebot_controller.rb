@@ -11,6 +11,10 @@ class LinebotController < ApplicationController
     }
   end
 
+  def get_news #スクレイピングを行い、ニュースを取得
+
+  end
+
   def callback
     body = request.body.read
 

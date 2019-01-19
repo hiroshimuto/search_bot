@@ -12,14 +12,14 @@ class LinebotController < ApplicationController
     }
   end
 
-  def get_news #スクレイピングを行い、ニュースを取得
+  def get_news(company_name) #スクレイピングを行い、ニュースを取得
     driver = Selenium::WebDriver.for :chrome
  # ブラウザ起動
     driver.get('https://www.yahoo.co.jp/')
     search_box = driver.find_element(:id, 'srchtxt') # 検索欄
     search_btn = driver.find_element(:id, 'srchbtn') # 検索ボタン
     # 入力欄に'Ruby'を入力し、検索ボタンを押下
-    search_box.send_keys 'リクルート'
+    search_box.send_keys '#{company_name}'
     search_btn.click
 
     #ドロップダウンリストからニュースを選択、押下
@@ -38,9 +38,9 @@ class LinebotController < ApplicationController
     all_news_info = all_news_title.zip(all_news_link)
 
     all_news_info.each do |news_info|
-        @news_info = news_info
+        news_info = news_info
     end
-
+    return news_info
   end
 
   def callback
@@ -51,6 +51,12 @@ class LinebotController < ApplicationController
       error 400 do 'Bad Request' end
     end
 
+    #メッセージイベントからテキストの取得
+    text_params = params["events"][0]["message"]["text"]
+    #取得したメッセージイベントのテキストを元にスクレイピングを実行
+    result = get_news(text_params)
+
+
     events = client.parse_events_from(body)
 
     events.each { |event|
@@ -59,7 +65,10 @@ class LinebotController < ApplicationController
         case event.type
         when Line::Bot::Event::MessageType::Text
           message = {
-            type: 'text',
+            type: 'template',
+            'template': {
+              'type': 'carousel',
+            },
             text: event.message['text']
           }
           client.reply_message(event['replyToken'], message)

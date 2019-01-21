@@ -59,9 +59,52 @@ class LinebotController < ApplicationController
         case event.type
         when Line::Bot::Event::MessageType::Text
           message = {
-            type: 'text',
-            text: event.message['text']
+            type: 'template',
+            altText: 'this is an template message',
+            template: {
+              type: 'carousel',
+              columns: [
+                {
+                  thumbnailImageUrl: 'https://example.com/image1.jpg',
+                  title: 'example',
+                  text: 'test',
+                  actions: [
+                    {
+                      type: 'message',
+                      label: 'keep',
+                      text: 'keep'
+                    },
+                    {
+                      type: 'uri',
+                      label: 'site',
+                      uri: 'https://example.com/page1'
+                    },
+                  ],
+                },
+                {
+                  thumbnailImageUrl: 'https://example.com/image2.jpg',
+                  title: 'example',
+                  text: 'test',
+                  actions: [
+                    {
+                      type: 'message',
+                      label: 'keep',
+                      text: 'keep'
+                    },
+                    {
+                      type: 'uri',
+                      label: 'site',
+                      uri: 'https://example.com/page2'
+                    },
+                  ],
+                },
+              ],
+            }
           }
+          # message = {
+          #   type: 'text',
+          #   text: event.message['text']
+          # }
           client.reply_message(event['replyToken'], message)
         end
       end

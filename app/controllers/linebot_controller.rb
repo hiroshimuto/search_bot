@@ -1,6 +1,5 @@
 class LinebotController < ApplicationController
   require 'line/bot'  # gem 'line-bot-api'
-  require 'selenium-webdriver'
 
   # callbackアクションのCSRFトークン認証を無効
   protect_from_forgery :except => [:callback]
@@ -11,6 +10,7 @@ class LinebotController < ApplicationController
       config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
     }
   end
+
 
   def get_news #スクレイピングを行い、ニュースを取得
     driver = Selenium::WebDriver.for :chrome

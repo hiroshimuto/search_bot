@@ -19,6 +19,7 @@ class LinebotController < ApplicationController
       error 400 do 'Bad Request' end
     end
 
+
     events = client.parse_events_from(body)
 
     events.each { |event|
@@ -27,8 +28,43 @@ class LinebotController < ApplicationController
         case event.type
         when Line::Bot::Event::MessageType::Text
           message = {
-            type: 'text',
-            text: event.message['text']
+            type: 'carousel',
+            contents:[
+              {
+                type: 'bubble',
+                body:{
+                  type: 'box',
+                  layout: 'vertical',
+                  spacing: 'sm',
+                  contents:[
+                    {
+                      type: 'text',
+                      text: event.message['text'],
+                      wrap: true,
+                      weight: 'bold',
+                      size: 'xl'
+                    },
+                  ]
+                },
+                footer:{
+                  type: 'box',
+                  layout: 'vertical',
+                  spacing: 'sm',
+                  contents: [
+                    {
+                      type: 'button',
+                      style: 'primary',
+                      action: {
+                        type: 'uri',
+                        label: 'Add to Cart',
+                        uri: 'https://linecorp.com'
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+            # text: event.message['text']
           }
           client.reply_message(event['replyToken'], message)
         end

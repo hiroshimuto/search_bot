@@ -77,13 +77,7 @@ class LinebotController < ApplicationController
                 {
                   thumbnailImageUrl: 'https://example.com/image1.jpg',
                   title: 'example',
-                  text: 'test',
                   actions: [
-                    {
-                      type: 'message',
-                      label: 'keep',
-                      text: 'keep'
-                    },
                     {
                       type: 'uri',
                       label: 'site',
@@ -94,13 +88,7 @@ class LinebotController < ApplicationController
                 {
                   thumbnailImageUrl: 'https://example.com/image2.jpg',
                   title: 'example',
-                  text: 'test',
                   actions: [
-                    {
-                      type: 'message',
-                      label: 'keep',
-                      text: 'keep'
-                    },
                     {
                       type: 'uri',
                       label: 'site',

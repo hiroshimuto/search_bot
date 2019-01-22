@@ -60,8 +60,8 @@ class LinebotController < ApplicationController
 
     #メッセージイベントからテキストの取得
     search_word = params["events"][0]["message"]["text"]
-    #取得したテキストを元にget_newsアクションを呼び出す
-    # get_news(search_word)
+    #取得したテキストを元にget_newsアクションを呼び出し返り値を受け取る
+    search_result = get_news(search_word)
 
     events.each { |event|
       case event
@@ -76,7 +76,7 @@ class LinebotController < ApplicationController
               columns: [
                 {
                   thumbnailImageUrl: 'https://example.com/image1.jpg',
-                  title: '記事タイトル',
+                  title: search_result[0][0],
                   text: '詳細',
                   actions: [
                     {

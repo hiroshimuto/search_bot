@@ -76,7 +76,8 @@ class LinebotController < ApplicationController
               columns: [
                 {
                   thumbnailImageUrl: 'https://example.com/image1.jpg',
-                  title: 'example',
+                  title: '記事タイトル',
+                  text: '詳細',
                   actions: [
                     {
                       type: 'uri',
@@ -87,7 +88,8 @@ class LinebotController < ApplicationController
                 },
                 {
                   thumbnailImageUrl: 'https://example.com/image2.jpg',
-                  title: 'example',
+                  title: '記事タイトル',
+                  text: '詳細',
                   actions: [
                     {
                       type: 'uri',

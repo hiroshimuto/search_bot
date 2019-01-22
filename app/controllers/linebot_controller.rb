@@ -42,10 +42,12 @@ class LinebotController < ApplicationController
     # タイトルとリンクとサムネイル画像をそれぞれ対応させる
     all_news_info = all_news_title.zip(all_news_link,all_news_img)
 
-    all_news_info.each do |news_info|
-        news_info = news_info
-        return news_info
-    end
+    return all_news_info
+
+    # all_news_info.each do |news_info|
+    #     news_info = news_info
+    #     return news_info
+    # end
   end
 
   def callback
@@ -61,7 +63,7 @@ class LinebotController < ApplicationController
     #メッセージイベントからテキストの取得
     search_word = params["events"][0]["message"]["text"]
     #取得したテキストを元にget_newsアクションを呼び出す
-    # get_news(search_word)
+    search_result = get_news(search_word)
 
     events.each { |event|
       case event

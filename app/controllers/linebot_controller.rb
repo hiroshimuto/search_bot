@@ -44,6 +44,8 @@ class LinebotController < ApplicationController
 
     return all_news_info
 
+    driver.quit
+
     # all_news_info.each do |news_info|
     #     news_info = news_info
     #     return news_info

@@ -1,5 +1,6 @@
 class LinebotController < ApplicationController
   require 'line/bot'  # gem 'line-bot-api'
+  require 'selenium-webdriver'
 
   # callbackアクションのCSRFトークン認証を無効
   protect_from_forgery :except => [:callback]
@@ -12,14 +13,14 @@ class LinebotController < ApplicationController
   end
 
 
-  def get_news #スクレイピングを行い、ニュースを取得
+  def get_news(search_word) #スクレイピングを行い、ニュースを取得
     driver = Selenium::WebDriver.for :chrome
  # ブラウザ起動
     driver.get('https://www.yahoo.co.jp/')
     search_box = driver.find_element(:id, 'srchtxt') # 検索欄
     search_btn = driver.find_element(:id, 'srchbtn') # 検索ボタン
     # 入力欄に'Ruby'を入力し、検索ボタンを押下
-    search_box.send_keys '#{company_name}'
+    search_box.send_keys (search_word)
     search_btn.click
 
     #ドロップダウンリストからニュースを選択、押下
@@ -30,12 +31,16 @@ class LinebotController < ApplicationController
 
     # Xpathで指定した要素(ニュースタイトル)を取得
     news_el = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/h2[@class = "t"]/a')
+    # Xpathで指定した要素(ニュースサムネイル画像)を取得
+    news_img = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/span/a/img')
     # Xpathで取得した要素のうちタイトル部分のみ抽出しハッシュを作成
     all_news_title = news_el.map{|x| x.text}
     # Xpathで取得した要素のうちリンク部分のみ抽出しハッシュを作成
     all_news_link = news_el.map{|x| x.attribute('href')}
-    # タイトルとリンクをそれぞれ対応させる
-    all_news_info = all_news_title.zip(all_news_link)
+    # Xpathで取得したimg要素のうちsrc部分のみ抽出しハッシュを作成
+    all_news_img = news_img.map{|x| x.attribute('src')}
+    # タイトルとリンクとサムネイル画像をそれぞれ対応させる
+    all_news_info = all_news_title.zip(all_news_link,all_news_img)
 
     all_news_info.each do |news_info|
         news_info = news_info
@@ -52,6 +57,11 @@ class LinebotController < ApplicationController
     end
 
     events = client.parse_events_from(body)
+
+    #メッセージイベントからテキストの取得
+    search_word = params["events"][0]["message"]["text"]
+    #取得したテキストを元にget_newsアクションを呼び出す
+    get_news(search_word)
 
     events.each { |event|
       case event
@@ -101,10 +111,6 @@ class LinebotController < ApplicationController
               ],
             }
           }
-          # message = {
-          #   type: 'text',
-          #   text: event.message['text']
-          # }
           client.reply_message(event['replyToken'], message)
         end
       end

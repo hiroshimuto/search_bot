@@ -61,7 +61,7 @@ class LinebotController < ApplicationController
     #メッセージイベントからテキストの取得
     search_word = params["events"][0]["message"]["text"]
     #取得したテキストを元にget_newsアクションを呼び出す
-    get_news(search_word)
+    # get_news(search_word)
 
     events.each { |event|
       case event

@@ -76,17 +76,17 @@ class LinebotController < ApplicationController
               columns: [
                 {
                   thumbnailImageUrl: 'https://example.com/image1.jpg',
-                  title: 'example',
-                  text: 'test',
+                  title: '記事タイトルが入る',
+                  # text: 'test',
                   actions: [
-                    {
-                      type: 'message',
-                      label: 'keep',
-                      text: 'keep'
-                    },
+                    # {
+                    #   type: 'message',
+                    #   label: 'keep',
+                    #   text: 'keep'
+                    # },
                     {
                       type: 'uri',
-                      label: 'site',
+                      label: '記事を読む',
                       uri: 'https://example.com/page1'
                     },
                   ],
@@ -94,16 +94,16 @@ class LinebotController < ApplicationController
                 {
                   thumbnailImageUrl: 'https://example.com/image2.jpg',
                   title: 'example',
-                  text: 'test',
+                  # text: 'test',
                   actions: [
-                    {
-                      type: 'message',
-                      label: 'keep',
-                      text: 'keep'
-                    },
+                    # {
+                    #   type: 'message',
+                    #   label: 'keep',
+                    #   text: 'keep'
+                    # },
                     {
                       type: 'uri',
-                      label: 'site',
+                      label: '記事を読む',
                       uri: 'https://example.com/page2'
                     },
                   ],

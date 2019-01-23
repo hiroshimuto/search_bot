@@ -83,7 +83,7 @@ class LinebotController < ApplicationController
               columns: [
                 {
                   title: search_result[0][0],
-                  text: search_result[0][2],
+                  text: "",
                   actions: [
                     {
                       type: 'uri',
@@ -94,7 +94,7 @@ class LinebotController < ApplicationController
                 },
                 {
                   title: search_result[1][0],
-                  text: search_result[1][2],
+                  text: "",
                   actions: [
                     {
                       type: 'uri',

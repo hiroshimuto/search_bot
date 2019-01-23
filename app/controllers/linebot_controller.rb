@@ -80,7 +80,7 @@ class LinebotController < ApplicationController
               columns: [
                 {
                   thumbnailImageUrl: 'https://example.com/image1.jpg',
-                  title: search_word,
+                  title: search_result[0][0],
                   text: '詳細',
                   actions: [
                     {

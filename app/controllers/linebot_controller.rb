@@ -84,7 +84,7 @@ class LinebotController < ApplicationController
                 {
                   thumbnailImageUrl: search_result[0][2],
                   title: search_result[0][0],
-                  text: search_result[0][3],
+                  text: "",
                   actions: [
                     {
                       type: 'uri',
@@ -96,7 +96,7 @@ class LinebotController < ApplicationController
                 {
                   thumbnailImageUrl: search_result[1][2],
                   title: search_result[1][0],
-                  text: search_result[1][3],
+                  text: "",
                   actions: [
                     {
                       type: 'uri',
@@ -108,7 +108,7 @@ class LinebotController < ApplicationController
                 {
                   thumbnailImageUrl: search_result[2][2],
                   title: search_result[2][0],
-                  text: search_result[2][3],
+                  text: "",
                   actions: [
                     {
                       type: 'uri',
@@ -120,7 +120,7 @@ class LinebotController < ApplicationController
                 {
                   thumbnailImageUrl: search_result[3][2],
                   title: search_result[3][0],
-                  text: search_result[3][3],
+                  text: "",
                   actions: [
                     {
                       type: 'uri',
@@ -132,7 +132,7 @@ class LinebotController < ApplicationController
                 {
                   thumbnailImageUrl: search_result[4][2],
                   title: search_result[4][0],
-                  text: search_result[4][3],
+                  text: "",
                   actions: [
                     {
                       type: 'uri',

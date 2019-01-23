@@ -80,7 +80,7 @@ class LinebotController < ApplicationController
               columns: [
                 {
                   thumbnailImageUrl: 'https://example.com/image1.jpg',
-                  title: search_result[0][0],
+                  title: search_word,
                   text: '詳細',
                   actions: [
                     {
@@ -92,7 +92,7 @@ class LinebotController < ApplicationController
                 },
                 {
                   thumbnailImageUrl: 'https://example.com/image2.jpg',
-                  title: search_result[1][0],
+                  title: search_word,
                   text: '詳細',
                   actions: [
                     {

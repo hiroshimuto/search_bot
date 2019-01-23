@@ -21,10 +21,10 @@ class LinebotController < ApplicationController
     # 入力欄に'送信されたメッセージ'を入力し、エンターを実行
     search_box.send_keys(search_word, :enter)
     #ニュースボタンが表示されるまで待機
-    wait = Selenium::WebDriver::Wait.new(:timeout => 30)
-    wait.until {driver.find_element(:link_text,'ニュース').displayed?}
+    # wait = Selenium::WebDriver::Wait.new(:timeout => 30)
+    # wait.until {driver.find_element(:link_text,'ニュース').displayed?}
     #ニュースボタンを変数に代入
-    news_btn = driver.find_element(:link_text,'ニュース')
+    news_btn = driver.find_element(:link,'ニュース')
     #ニュースボタンをクリック
     news_btn.click
 

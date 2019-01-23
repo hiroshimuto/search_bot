@@ -42,10 +42,10 @@ class LinebotController < ApplicationController
     # タイトルとリンクとサムネイル画像をそれぞれ対応させる
     all_news_info = all_news_title.zip(all_news_link,all_news_img)
 
-    return all_news_info
-
+    driver.close
     driver.quit
 
+    return all_news_info
     # all_news_info.each do |news_info|
     #     news_info = news_info
     #     return news_info

@@ -81,7 +81,7 @@ class LinebotController < ApplicationController
                 {
                   thumbnailImageUrl: 'https://example.com/image1.jpg',
                   title: search_word,
-                  text: search_result,
+                  text: '詳細',
                   actions: [
                     {
                       type: 'uri',
@@ -93,7 +93,7 @@ class LinebotController < ApplicationController
                 {
                   thumbnailImageUrl: 'https://example.com/image2.jpg',
                   title: search_word,
-                  text: search_result,
+                  text: '詳細',
                   actions: [
                     {
                       type: 'uri',

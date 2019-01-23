@@ -77,26 +77,26 @@ class LinebotController < ApplicationController
               type: 'carousel',
               columns: [
                 {
-                  thumbnailImageUrl: 'https://example.com/image1.jpg',
+                  thumbnailImageUrl: search_result[0][2],
                   title: search_result[0][0],
                   text: '詳細',
                   actions: [
                     {
                       type: 'uri',
-                      label: 'site',
-                      uri: 'https://example.com/page1'
+                      label: '記事を読む',
+                      uri: search_result[0][1]
                     },
                   ],
                 },
                 {
-                  thumbnailImageUrl: 'https://example.com/image2.jpg',
-                  title: search_word,
+                  thumbnailImageUrl: search_result[1][2],
+                  title: search_result[1][0],
                   text: '詳細',
                   actions: [
                     {
                       type: 'uri',
-                      label: 'site',
-                      uri: 'https://example.com/page2'
+                      label: '記事を読む',
+                      uri: search_result[1][1]
                     },
                   ],
                 },

@@ -19,7 +19,7 @@ class LinebotController < ApplicationController
     driver.get('https://www.google.co.jp/')
     search_box = driver.find_element(:name, 'q') # 検索欄
     # 入力欄に'送信されたメッセージ'を入力し、エンターを実行
-    search_box.send_keys(company_name, :enter)
+    search_box.send_keys(search_word, :enter)
     #ニュースボタンを変数に代入
     news_btn = driver.find_element(:link_text,'ニュース')
     #ニュースボタンをクリック

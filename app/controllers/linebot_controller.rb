@@ -79,7 +79,6 @@ class LinebotController < ApplicationController
             altText: 'this is an template message',
             template: {
               type: 'carousel',
-              imageSize: 'contain',
               columns: [
                 {
                   thumbnailImageUrl: search_result[0][2],
@@ -106,6 +105,7 @@ class LinebotController < ApplicationController
                   ],
                 },
               ],
+              imageSize: 'contain'
             }
           }
           client.reply_message(event['replyToken'], message)

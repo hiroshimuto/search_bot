@@ -15,7 +15,7 @@ class LinebotController < ApplicationController
 
   def get_news(search_word) #スクレイピングを行い、ニュースを取得
     driver = Selenium::WebDriver.for :chrome
- # ブラウザ起動
+    # ブラウザ起動
     driver.get('https://www.yahoo.co.jp/')
     search_box = driver.find_element(:id, 'srchtxt') # 検索欄
     search_btn = driver.find_element(:id, 'srchbtn') # 検索ボタン
@@ -29,18 +29,21 @@ class LinebotController < ApplicationController
     news_btn = driver.find_element(:id, 'news')
     news_btn.click
 
-    # Xpathで指定した要素(ニュースタイトル)を取得
+    # Xpathで指定した要素(ニュースタイトル/画像/サブテキスト)を取得
     news_el = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/h2[@class = "t"]/a')
-    # Xpathで指定した要素(ニュースサムネイル画像)を取得
     news_img = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/span/a/img')
+    news_subtxt = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/div[@class= "txt" ]/p')
+
     # Xpathで取得した要素のうちタイトル部分のみ抽出しハッシュを作成
     all_news_title = news_el.map{|x| x.text}
     # Xpathで取得した要素のうちリンク部分のみ抽出しハッシュを作成
     all_news_link = news_el.map{|x| x.attribute('href')}
     # Xpathで取得したimg要素のうちsrc部分のみ抽出しハッシュを作成
     all_news_img = news_img.map{|x| x.attribute('src')}
-    # タイトルとリンクとサムネイル画像をそれぞれ対応させる
-    all_news_info = all_news_title.zip(all_news_link,all_news_img)
+    # Xpathで取得したpタグ要素のうちサブテキスト部分のみ抽出しハッシュを作成
+    all_news_subtxt = news_subtxt.map{|x| x.text}
+    # タイトルとリンクと画像をそれぞれ対応させる
+    all_news_info = all_news_title.zip(all_news_link,all_news_img,all_news_subtxt)
 
     driver.close
     driver.quit
@@ -79,30 +82,31 @@ class LinebotController < ApplicationController
               type: 'carousel',
               columns: [
                 {
-                  thumbnailImageUrl: 'https://example.com/image1.jpg',
-                  title: search_word,
-                  text: '詳細',
+                  thumbnailImageUrl: search_result[0][2],
+                  title: search_result[0][0],
+                  text: 'a',
                   actions: [
                     {
                       type: 'uri',
-                      label: 'site',
-                      uri: 'https://example.com/page1'
+                      label: '記事を読む',
+                      uri: search_result[0][1]
                     },
                   ],
                 },
                 {
-                  thumbnailImageUrl: 'https://example.com/image2.jpg',
-                  title: search_word,
-                  text: '詳細',
+                  thumbnailImageUrl: search_result[1][2],
+                  title: search_result[1][0],
+                  text: 'a',
                   actions: [
                     {
                       type: 'uri',
-                      label: 'site',
-                      uri: 'https://example.com/page2'
+                      label: '記事を読む',
+                      uri: search_result[1][1]
                     },
                   ],
                 },
               ],
+              imageSize: 'contain'
             }
           }
           client.reply_message(event['replyToken'], message)

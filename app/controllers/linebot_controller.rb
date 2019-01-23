@@ -16,18 +16,22 @@ class LinebotController < ApplicationController
   def get_news(search_word) #スクレイピングを行い、ニュースを取得
     driver = Selenium::WebDriver.for :chrome
     # ブラウザ起動
-    driver.get('https://www.google.co.jp/')
-    search_box = driver.find_element(:name, 'q') # 検索欄
-    # 入力欄に'送信されたメッセージ'を入力し、エンターを実行
-    search_box.send_keys(search_word, :enter)
-    #ニュースボタンを変数に代入
-    news_btn = news_btn = driver.find_element(:xpath, "//div[@id = 'hdtb-msb-vis']/div/a[contains(text(), 'ニュース')]")
-    #ニュースボタンをクリック
+    driver.get('https://www.yahoo.co.jp/')
+    search_box = driver.find_element(:id, 'srchtxt') # 検索欄
+    search_btn = driver.find_element(:id, 'srchbtn') # 検索ボタン
+    # 入力欄に'Ruby'を入力し、検索ボタンを押下
+    search_box.send_keys (search_word)
+    search_btn.click
+
+    #ドロップダウンリストからニュースを選択、押下
+    dropdown = driver.find_element(:id, 'vmLink') # ドロップダウンリスト
+    dropdown.click
+    news_btn = driver.find_element(:id, 'news')
     news_btn.click
 
     # Xpathで指定した要素(ニュースタイトル)を取得
-    news_el = driver.find_elements(:xpath, "//div[@class = 'g']/div/div/h3/a")
-    news_img = driver.find_elements(:xpath, "//div[@class = 'g']/div/a/img")
+    news_el = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/h2[@class = "t"]/a')
+    news_img = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/span/a/img')
     # Xpathで取得した要素のうちタイトル部分のみ抽出しハッシュを作成
     all_news_title = news_el.map{|x| x.text}
     # Xpathで取得した要素のうちリンク部分のみ抽出しハッシュを作成

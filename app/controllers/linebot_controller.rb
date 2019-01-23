@@ -32,18 +32,18 @@ class LinebotController < ApplicationController
     # Xpathで指定した要素(ニュースタイトル/画像/サブテキスト)を取得
     news_el = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/h2[@class = "t"]/a')
     news_img = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/span/a/img')
-    news_subtxt = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/div[@class= "txt" ]/p')
+    news_subtxt = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/div[@class= "txt" ]/p[@class= "a"]')
 
     # Xpathで取得した要素のうちタイトル部分のみ抽出しハッシュを作成
     all_news_title = news_el.map{|x| x.text}
     # Xpathで取得した要素のうちリンク部分のみ抽出しハッシュを作成
     all_news_link = news_el.map{|x| x.attribute('href')}
     # Xpathで取得したimg要素のうちsrc部分のみ抽出しハッシュを作成
-    all_news_img = news_img.map{|x| x.attribute('src')}
+    # all_news_img = news_img.map{|x| x.attribute('src')}
     # Xpathで取得したpタグ要素のうちサブテキスト部分のみ抽出しハッシュを作成
     all_news_subtxt = news_subtxt.map{|x| x.text}
     # タイトルとリンクと画像をそれぞれ対応させる
-    all_news_info = all_news_title.zip(all_news_link,all_news_img,all_news_subtxt)
+    all_news_info = all_news_title.zip(all_news_link,all_news_subtxt)
 
     driver.close
     driver.quit
@@ -82,9 +82,8 @@ class LinebotController < ApplicationController
               type: 'carousel',
               columns: [
                 {
-                  thumbnailImageUrl: search_result[0][2],
                   title: search_result[0][0],
-                  text: 'a',
+                  text: search_result[0][2],
                   actions: [
                     {
                       type: 'uri',
@@ -94,9 +93,8 @@ class LinebotController < ApplicationController
                   ],
                 },
                 {
-                  thumbnailImageUrl: search_result[1][2],
                   title: search_result[1][0],
-                  text: 'a',
+                  text: search_result[1][2],
                   actions: [
                     {
                       type: 'uri',
@@ -106,7 +104,6 @@ class LinebotController < ApplicationController
                   ],
                 },
               ],
-              imageSize: 'contain'
             }
           }
           client.reply_message(event['replyToken'], message)

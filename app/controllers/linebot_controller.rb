@@ -70,47 +70,66 @@ class LinebotController < ApplicationController
     #取得したテキストを元にget_newsアクションを呼び出す
     search_result = get_news(search_word)
 
-    events.each { |event|
-      case event
-      when Line::Bot::Event::Message
-        case event.type
-        when Line::Bot::Event::MessageType::Text
-          message = {
-            type: 'template',
-            altText: 'this is an template message',
-            template: {
-              type: 'carousel',
-              columns: [
-                {
-                  title: search_result[0][0],
-                  text: ' ',
-                  actions: [
-                    {
-                      type: 'uri',
-                      label: '記事を読む',
-                      uri: search_result[0][1]
-                    },
-                  ],
-                },
-                {
-                  title: search_result[1][0],
-                  text: ' ',
-                  actions: [
-                    {
-                      type: 'uri',
-                      label: '記事を読む',
-                      uri: search_result[1][1]
-                    },
-                  ],
-                },
-              ],
+    if search_result != nil
+      events.each { |event|
+        case event
+        when Line::Bot::Event::Message
+          case event.type
+          when Line::Bot::Event::MessageType::Text
+            message = {
+              type: 'template',
+              altText: 'this is an template message',
+              template: {
+                type: 'carousel',
+                columns: [
+                  {
+                    title: search_result[0][0],
+                    text: ' ',
+                    actions: [
+                      {
+                        type: 'uri',
+                        label: '記事を読む',
+                        uri: search_result[0][1]
+                      },
+                    ],
+                  },
+                  {
+                    title: search_result[1][0],
+                    text: ' ',
+                    actions: [
+                      {
+                        type: 'uri',
+                        label: '記事を読む',
+                        uri: search_result[1][1]
+                      },
+                    ],
+                  },
+                ],
+              }
             }
-          }
-          client.reply_message(event['replyToken'], message)
+            client.reply_message(event['replyToken'], message)
+          end
         end
-      end
-    }
+      }
 
-    head :ok
+      head :ok
+    elsif
+      events.each { |event|
+        case event
+        when Line::Bot::Event::Message
+          case event.type
+          when Line::Bot::Event::MessageType::Text
+            message = {
+              type: 'text',
+              text: 'ごめんね。記事が見つからなかったよ・・・'
+            }
+            client.reply_message(event['replyToken'], message)
+          end
+        end
+      }
+
+      head :ok
+    end
+
   end
 end

@@ -49,10 +49,6 @@ class LinebotController < ApplicationController
     driver.quit
 
     return all_news_info
-    # all_news_info.each do |news_info|
-    #     news_info = news_info
-    #     return news_info
-    # end
   end
 
   def callback
@@ -70,7 +66,6 @@ class LinebotController < ApplicationController
     #取得したテキストを元にget_newsアクションを呼び出す
     search_result = get_news(search_word)
 
-    if search_result != nil
       events.each { |event|
         case event
         when Line::Bot::Event::Message
@@ -111,25 +106,7 @@ class LinebotController < ApplicationController
           end
         end
       }
-
       head :ok
-    elsif
-      events.each { |event|
-        case event
-        when Line::Bot::Event::Message
-          case event.type
-          when Line::Bot::Event::MessageType::Text
-            message = {
-              type: 'text',
-              text: 'ごめんね。記事が見つからなかったよ・・・'
-            }
-            client.reply_message(event['replyToken'], message)
-          end
-        end
-      }
-
-      head :ok
-    end
-
   end
+
 end

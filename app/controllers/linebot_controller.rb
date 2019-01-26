@@ -1,6 +1,7 @@
 class LinebotController < ApplicationController
   require 'line/bot'  # gem 'line-bot-api'
   require 'selenium-webdriver'
+  require 'cgi'
 
   # callbackアクションのCSRFトークン認証を無効
   protect_from_forgery :except => [:callback]
@@ -13,37 +14,22 @@ class LinebotController < ApplicationController
   end
 
 
-  def get_news(search_word) #スクレイピングを行い、ニュースを取得
+  def get_news(escaped_search_word) #スクレイピングを行い、ニュースを取得
     driver = Selenium::WebDriver.for :chrome
-    # ブラウザ起動
-    driver.get('https://www.yahoo.co.jp/')
-    search_box = driver.find_element(:id, 'srchtxt') # 検索欄
-    search_btn = driver.find_element(:id, 'srchbtn') # 検索ボタン
-    # 入力欄に'Ruby'を入力し、検索ボタンを押下
-    search_box.send_keys (search_word)
-    search_btn.click
+    # googlechromeニュースのブラウザ起動
+    driver.get('https://news.google.com/search?q=' + escaped_search_word + '&hl=ja&gl=JP&ceid=JP%3Aja')
 
-    #ドロップダウンリストからニュースを選択、押下
-    dropdown = driver.find_element(:id, 'vmLink') # ドロップダウンリスト
-    dropdown.click
-    news_btn = driver.find_element(:id, 'news')
-    news_btn.click
-
-    # Xpathで指定した要素(ニュースタイトル/画像/サブテキスト)を取得
-    news_el = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/h2[@class = "t"]/a')
-    news_img = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/span/a/img')
-    news_subtxt = driver.find_elements(:xpath, '//div[@id = "NSm"]/div/div[@class= "txt" ]/p[@class= "a"]')
+    # Xpathで指定した要素(ニュースタイトル/リンク)を取得
+    news_title = driver.find_elements(:xpath, '//div[@class= "mEaVNd"]/div/h3/a/span')
+    news_el = driver.find_elements(:xpath, '//div[@class= "mEaVNd"]/div/h3/a')
 
     # Xpathで取得した要素のうちタイトル部分のみ抽出しハッシュを作成
-    all_news_title = news_el.map{|x| x.text}
+    all_news_title = news_title.map{|x| x.text}
     # Xpathで取得した要素のうちリンク部分のみ抽出しハッシュを作成
     all_news_link = news_el.map{|x| x.attribute('href')}
-    # Xpathで取得したimg要素のうちsrc部分のみ抽出しハッシュを作成
-    # all_news_img = news_img.map{|x| x.attribute('src')}
-    # Xpathで取得したpタグ要素のうちサブテキスト部分のみ抽出しハッシュを作成
-    all_news_subtxt = news_subtxt.map{|x| x.text}
-    # タイトルとリンクと画像をそれぞれ対応させる
-    all_news_info = all_news_title.zip(all_news_link,all_news_subtxt)
+
+    # タイトルとリンクをそれぞれ対応させる
+    all_news_info = all_news_title.zip(all_news_link)
 
     driver.close
     driver.quit
@@ -63,8 +49,10 @@ class LinebotController < ApplicationController
 
     #メッセージイベントからテキストの取得
     search_word = params["events"][0]["message"]["text"]
+    # URIエンコードを行う
+    escaped_search_word = CGI.escape(search_word)
     #取得したテキストを元にget_newsアクションを呼び出す
-    search_result = get_news(search_word)
+    search_result = get_news(escaped_search_word)
 
       events.each { |event|
         case event

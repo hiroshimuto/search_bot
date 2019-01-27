@@ -51,8 +51,11 @@ class LinebotController < ApplicationController
     search_word = params["events"][0]["message"]["text"]
     # URIエンコードを行う
     escaped_search_word = CGI.escape(search_word)
+
     #取得したテキストを元にget_newsアクションを呼び出す
     search_result = get_news(escaped_search_word)
+
+
 
       events.each { |event|
         case event
@@ -67,7 +70,7 @@ class LinebotController < ApplicationController
                 columns: [
                   {
                     title: search_result[0][0],
-                    text: ' ',
+                    text: search_word + 'に関するニュース',
                     actions: [
                       {
                         type: 'uri',
@@ -78,12 +81,23 @@ class LinebotController < ApplicationController
                   },
                   {
                     title: search_result[1][0],
-                    text: ' ',
+                    text: search_word + 'に関するニュース',
                     actions: [
                       {
                         type: 'uri',
                         label: '記事を読む',
                         uri: search_result[1][1]
+                      },
+                    ],
+                  },
+                  {
+                    title: search_result[2][0],
+                    text: search_word + 'に関するニュース',
+                    actions: [
+                      {
+                        type: 'uri',
+                        label: '記事を読む',
+                        uri: search_result[2][1]
                       },
                     ],
                   },
